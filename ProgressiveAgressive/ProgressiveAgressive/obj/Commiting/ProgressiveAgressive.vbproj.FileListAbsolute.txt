@@ -1,0 +1,4 @@
+C:\Users\██████\Desktop\pse\ProgressiveAgressive\ProgressiveAgressive\obj\Commiting\ProgressiveAgressive.vbproj.GenerateResource.Cache
+C:\Users\██████\Desktop\pse\ProgressiveAgressive\ProgressiveAgressive\bin\Commiting\pse.exe
+C:\Users\██████\Desktop\pse\ProgressiveAgressive\ProgressiveAgressive\obj\Commiting\pse.Resources.resources
+C:\Users\██████\Desktop\pse\ProgressiveAgressive\ProgressiveAgressive\obj\Commiting\pse.exe
