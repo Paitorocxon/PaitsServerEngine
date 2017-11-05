@@ -84,14 +84,31 @@ if(isset($_GET['command'])){
                 }
                 $files = glob('path/to/temp/{,.}*', GLOB_BRACE);
                 foreach($files as $file){ 
-                  if(is_file($file))
+                  if(is_file($file)){
                     unlink($file);
+                  }
                 }
                 try{
                     rmdir($command[1]);
                 } catch (Exception $ex){
                     echo  $ex;
                 }
+                echo "Erased " . $command[1];      
+            }else{        
+                echo "Error!" . $command[1];            
+            }
+            die();  
+        }elseif($command[0]=="rm"){
+            if(isset($command[1])){
+                if(strpos($command[1],"..")){
+                    die("Illegal charackters! (..)");
+                }
+                if( file_exists($command[1])){
+                  if(is_file($command[1])){
+                    unlink($command[1]);
+                  }
+                }
+
                 echo "Erased " . $command[1];      
             }else{        
                 echo "Error!" . $command[1];            
@@ -110,15 +127,15 @@ if(isset($_GET['command'])){
             }
             die();    
         }elseif($command[0]=="createuser"){
-            if(isset($command[1])){
+            if(isset($command[1]) && isset($command[2])){
                 if(strpos($command[1],"..")){
                     die("Illegal charackters! (..)");
                 }
                 if(file_exists("userfiles/" . $command[1])){
                     die("User exists already");
                 }else{
-                    $myfile = fopen("userfiles/" . $command[2], "w") or die("Cannot create user");
-                    $txt = base64_decode(base64_decode(base64_decode($command[3])));
+                    $myfile = fopen("userfiles/" . $command[1], "w") or die("Cannot create user");
+                    $txt = base64_encode(base64_encode(base64_encode($command[2])));
                     fwrite($myfile, $txt);
                     fclose($myfile);
                 }   
