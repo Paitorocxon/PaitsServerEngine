@@ -20,6 +20,13 @@ if(isset($_GET['user']) && isset($_GET['password'])){
 }else{
     die("Permission denied!");
 }
+if (is_dir("userfiles")){
+    mkdir("userfiles");
+    $myfile = fopen("userfiles/" . "admin", "w") or die("Cannot create user");
+    $txt = "1234";
+    fwrite($myfile, $txt);
+    fclose($myfile);
+}
 echo "<!--[SERVER]-->" . "\n";
 if(isset($_GET['command'])){
     $full_command = explode(" ", $_GET['command']);
@@ -101,13 +108,31 @@ if(isset($_GET['command'])){
             }else{        
                 echo "Error! No such file or directory!" . $command[1];            
             }
+            die();    
+        }elseif($command[0]=="createuser"){
+            if(isset($command[1])){
+                if(strpos($command[1],"..")){
+                    die("Illegal charackters! (..)");
+                }
+                if(file_exists("userfiles/" . $command[1])){
+                    die("User exists already");
+                }else{
+                    $myfile = fopen("userfiles/" . $command[2], "w") or die("Cannot create user");
+                    $txt = $command[3];
+                    fwrite($myfile, $txt);
+                    fclose($myfile);
+                }   
+            }else{        
+                echo "Error! No such file or directory!" . $command[1];            
+            }
             die();  
         }elseif($command[0]=="help"){
             echo "\n";
-            echo "ls </FOLDERNAME>       List all files in folder" . "\n";
-            echo "mkdir FOLDERNAME       Creates a new directory" . "\n";
-            echo "rmdir FOLDERNAME       Deletes a directory" . "\n";
-            echo "del FILENAME           Deletes a file" . "\n";
+            echo "ls </FOLDERNAME>                  List all files in folder" . "\n";
+            echo "mkdir FOLDERNAME                  Creates a new directory" . "\n";
+            echo "rmdir FOLDERNAME                  Deletes a directory" . "\n";
+            echo "del FILENAME                      Deletes a file" . "\n";
+            echo "createuser USERNAME PASSWORD      Create user" . "\n";
             die();            
         }        
     }
