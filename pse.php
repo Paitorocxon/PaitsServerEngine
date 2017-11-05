@@ -3,7 +3,7 @@
 // COPYRIGHT © 2017 Paitorocxon (Fabian Müller)
 //  VERSION 1.0.0
 function Error_Handler($error_number,$error_string,$error_file,$error_line){
-    die('<!--[SERVER] ERROR ' . $error_number .' !-->');
+    die('<!--[SERVER] ERROR ' . $error_number . $error_number . $error_string . $error_file . $error_line . ' !-->');
 }
 set_error_handler("Error_Handler");
 if(isset($_GET['user']) && isset($_GET['password'])){
@@ -20,7 +20,7 @@ if(isset($_GET['user']) && isset($_GET['password'])){
 }else{
     die("Permission denied!");
 }
-if (is_dir("userfiles")){
+if (!is_dir("userfiles")){
     mkdir("userfiles");
     $myfile = fopen("userfiles/" . "admin", "w") or die("Cannot create user");
     $txt = "1234";
@@ -118,7 +118,24 @@ if(isset($_GET['command'])){
                     die("User exists already");
                 }else{
                     $myfile = fopen("userfiles/" . $command[2], "w") or die("Cannot create user");
-                    $txt = $command[3];
+                    $txt = base64_decode(base64_decode(base64_decode($command[3])));
+                    fwrite($myfile, $txt);
+                    fclose($myfile);
+                }   
+            }else{        
+                echo "Error! No such file or directory!" . $command[1];            
+            }
+            die();  
+        }elseif($command[0]=="touch"){
+            if(isset($command[1])){
+                if(strpos($command[1],"..")){
+                    die("Illegal charackters! (..)");
+                }
+                if(file_exists($command[1])){
+                    die("User exists already");
+                }else{
+                    $myfile = fopen($command[1], "w") or die("Cannot create file");
+                    $txt = $command[2];
                     fwrite($myfile, $txt);
                     fclose($myfile);
                 }   
@@ -133,6 +150,7 @@ if(isset($_GET['command'])){
             echo "rmdir FOLDERNAME                  Deletes a directory" . "\n";
             echo "del FILENAME                      Deletes a file" . "\n";
             echo "createuser USERNAME PASSWORD      Create user" . "\n";
+            echo "touch FILENAME <content>          Create new file" . "\n";
             die();            
         }        
     }
