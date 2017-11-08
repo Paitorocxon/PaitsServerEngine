@@ -1,12 +1,26 @@
-ï»¿<?php
+<?php
 //PAITS SERVER ENGINE
-// COPYRIGHT Â© 2017 Paitorocxon (Fabian MÃ¼ller)
+// COPYRIGHT © 2017 Paitorocxon (Fabian Müller)
 //  VERSION 1.0.1
+
+$AdministratorUsername = "root";
+$AdministratorPassword = "root";
+
+
+
+
+
+
+
 function Error_Handler($error_number,$error_string,$error_file,$error_line){
     die('<!--[SERVER] ERROR ' . $error_number . $error_number . "\n" . "#####" . $error_string .  "#####" . "\n" . $error_file . $error_line . ' !-->');
 }
 set_error_handler("Error_Handler");
 if(isset($_GET['user']) && isset($_GET['password'])){
+    
+    
+    
+    
     if(file_exists("userfiles/" . $_GET['user'])){
         if(base64_decode(base64_decode(base64_decode(file_get_contents("userfiles/" . $_GET['user']))))==$_GET['password']){
         }else{
@@ -14,16 +28,21 @@ if(isset($_GET['user']) && isset($_GET['password'])){
             die();
         }
     }else{
-        echo "<!--[SERVER] 0,404-->";
-        die();
+        
+            if ($_GET['user'] == $AdministratorUsername && $_GET['password'] == $AdministratorPassword){
+        //ignore login
+    }else{
+        die("<!--[SERVER] 0,404-->");
+    }
+        
     }
 }else{
-    die("Permission denied!");
+
 }
 if (!is_dir("userfiles")){
     mkdir("userfiles");
-    $myfile = fopen("userfiles/" . "admin", "w") or die("Cannot create user");
-    $txt = "1234";
+    $myfile = fopen("userfiles/" . "root", "w") or die("Cannot create user");
+    $txt = "root";
     fwrite($myfile, $txt);
     fclose($myfile);
 }
@@ -98,6 +117,15 @@ if(isset($_GET['command'])){
                 echo "Error!" . $command[1];            
             }
             die();  
+        }elseif($command[0]=="upload"){
+            if(isset($command[1])){
+                $myfile = fopen($command[1], "w") or die("Cannot create file");
+                $txt = base64_decode($command[2]);
+                fwrite($myfile, $txt);
+                fclose($myfile);
+            }
+               
+            die();  
         }elseif($command[0]=="rm"){
             if(isset($command[1])){
                 /*if(strpos($command[1],"..")){
@@ -106,6 +134,20 @@ if(isset($_GET['command'])){
                 if( file_exists($command[1])){
                   if(is_file($command[1])){
                     unlink($command[1]);
+                  }
+                }
+
+                echo "Erased " . $command[1];      
+            }else{        
+                echo "Error!" . $command[1];            
+            }
+            die();  
+        }elseif($command[0]=="rmuser"){
+            if(isset($command[1])){
+         
+                if( file_exists('userfiles/' . $command[1])){
+                  if(is_file('userfiles/' . $command[1])){
+                    unlink('userfiles/' . $command[1]);
                   }
                 }
 
@@ -229,6 +271,7 @@ if(isset($_GET['command'])){
             echo "read FILENAME <content>                       Read a file" . "\n";
             echo "sql HOST USER PASSWORD DATABASE COMMAND       Run SQL command" . "\n";
             echo "rm FILENAME                                   Delete a file" . "\n";
+            echo "rmuser USERNAME                               Delete a user" . "\n";
             die();            
         }        
     }
