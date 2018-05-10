@@ -1,6 +1,6 @@
 # PaitsServerEngineTerminal
-#Using jQuery JavaScript Library v1.12.4 | http://jquery.com/
-#Using jQuery UI - v1.12.1 - 2016-09-14 | http://jqueryui.com
+Using jQuery JavaScript Library v1.12.4 | http://jquery.com/
+Using jQuery UI - v1.12.1 - 2016-09-14 | http://jqueryui.com
 
 
 Paits Server Engine Terminal comes as a tiny webshell. Only the basics!
